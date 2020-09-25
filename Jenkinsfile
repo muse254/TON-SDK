@@ -114,7 +114,7 @@ def buildBranchesMap() {
 
 def buildParams() {
     buildImagesMap()
-    if(!isUpstream() && GIT_BRANCH != 'master' && !(GIT_BRANCH ==~ '^PR-[0-9]+')) {
+    if(!isUpstream() && GIT_BRANCH != 'master' && !(GIT_BRANCH ==~ '^PR-[0-9]+') && !(GIT_BRANCH ==~ '^v[0-9]+')) {
         G_images['ton-types'] = 'tonlabs/ton-types:latest'
         G_images['ton-labs-types'] = 'tonlabs/ton-labs-types:latest'
         G_images['ton-block'] = 'tonlabs/ton-block:latest'
@@ -372,7 +372,7 @@ ton_client/platforms/ton-client-web"""
                                 G_binversion = sh (script: "node tonVersion.js ${folders}", returnStdout: true).trim()
                             }
 
-                            if(!isUpstream() && (GIT_BRANCH == 'master' || GIT_BRANCH ==~ '^PR-[0-9]+' || GIT_BRANCH == "${getVar(G_binversion)}-rc")) {
+                            if(!isUpstream() && (GIT_BRANCH == 'master' || GIT_BRANCH ==~ '^PR-[0-9]+' || GIT_BRANCH == "${getVar(G_binversion)}-rc") || GIT_BRANCH ==~ '^v[0-9]+') {
                                 withCredentials([file(credentialsId: 'ovh-s3-creds', variable: 'ovhs3')]) {
                                     sh """
                                         export AWS_CONFIG_FILE=\$(echo \"\${ovhs3}\")
@@ -492,7 +492,7 @@ Possible RC: ${getVar(G_binversion)}-rc"""
                 stage('Parallel stages') {
                     when {
                         expression {
-                            return !isUpstream() && (GIT_BRANCH == 'master' || GIT_BRANCH ==~ '^PR-[0-9]+')
+                            return !isUpstream() && (GIT_BRANCH == 'master' || GIT_BRANCH ==~ '^PR-[0-9]+' ||  GIT_BRANCH ==~ '^v[0-9]+')
                         }
                     }
                     steps {
@@ -532,7 +532,7 @@ Possible RC: ${getVar(G_binversion)}-rc"""
                         stage('Deploy') {
                             when { 
                                 expression {
-                                    return GIT_BRANCH == 'master' || GIT_BRANCH ==~ '^PR-[0-9]+' || GIT_BRANCH == "${getVar(G_binversion)}-rc"
+                                    return GIT_BRANCH == 'master' || GIT_BRANCH ==~ '^PR-[0-9]+' || GIT_BRANCH == "${getVar(G_binversion)}-rc" || GIT_BRANCH ==~ '^v[0-9]+'
                                 }
                             }
                             steps {
@@ -599,7 +599,7 @@ Possible RC: ${getVar(G_binversion)}-rc"""
                         stage('Deploy') {
                             when { 
                                 expression {
-                                    return GIT_BRANCH == 'master' || GIT_BRANCH ==~ '^PR-[0-9]+' || GIT_BRANCH == "${getVar(G_binversion)}-rc"
+                                    return GIT_BRANCH == 'master' || GIT_BRANCH ==~ '^PR-[0-9]+' || GIT_BRANCH == "${getVar(G_binversion)}-rc" || GIT_BRANCH ==~ '^v[0-9]+'
                                 }
                             }
                             steps {
@@ -660,7 +660,7 @@ Possible RC: ${getVar(G_binversion)}-rc"""
                         stage('Deploy') {
                             when { 
                                 expression {
-                                    return GIT_BRANCH == 'master' || GIT_BRANCH ==~ '^PR-[0-9]+' || GIT_BRANCH == "${getVar(G_binversion)}-rc"
+                                    return GIT_BRANCH == 'master' || GIT_BRANCH ==~ '^PR-[0-9]+' || GIT_BRANCH == "${getVar(G_binversion)}-rc" || GIT_BRANCH ==~ '^v[0-9]+'
                                 }
                             }
                             steps {
@@ -734,7 +734,7 @@ Possible RC: ${getVar(G_binversion)}-rc"""
                         stage('Deploy') {
                             when { 
                                 expression {
-                                    return GIT_BRANCH == 'master' || GIT_BRANCH ==~ '^PR-[0-9]+' || GIT_BRANCH == "${getVar(G_binversion)}-rc"
+                                    return GIT_BRANCH == 'master' || GIT_BRANCH ==~ '^PR-[0-9]+' || GIT_BRANCH == "${getVar(G_binversion)}-rc" || GIT_BRANCH ==~ '^v[0-9]+'
                                 }
                             }
                             steps {
@@ -813,7 +813,7 @@ Possible RC: ${getVar(G_binversion)}-rc"""
                         stage('Deploy') {
                             when { 
                                 expression {
-                                    return GIT_BRANCH == 'master' || GIT_BRANCH ==~ '^PR-[0-9]+' || GIT_BRANCH == "${getVar(G_binversion)}-rc"
+                                    return GIT_BRANCH == 'master' || GIT_BRANCH ==~ '^PR-[0-9]+' || GIT_BRANCH == "${getVar(G_binversion)}-rc" || GIT_BRANCH ==~ '^v[0-9]+'
                                 }
                             }
                             steps {
@@ -892,7 +892,7 @@ Possible RC: ${getVar(G_binversion)}-rc"""
                         stage('Deploy') {
                             when { 
                                 expression {
-                                    return GIT_BRANCH == 'master' || GIT_BRANCH ==~ '^PR-[0-9]+' || GIT_BRANCH == "${getVar(G_binversion)}-rc"
+                                    return GIT_BRANCH == 'master' || GIT_BRANCH ==~ '^PR-[0-9]+' || GIT_BRANCH == "${getVar(G_binversion)}-rc" || GIT_BRANCH ==~ '^v[0-9]+'
                                 }
                             }
                             steps {
@@ -967,7 +967,7 @@ Possible RC: ${getVar(G_binversion)}-rc"""
                         stage('Deploy') {
                             when { 
                                 expression {
-                                    return GIT_BRANCH == 'master' || GIT_BRANCH ==~ '^PR-[0-9]+' || GIT_BRANCH == "${getVar(G_binversion)}-rc"
+                                    return GIT_BRANCH == 'master' || GIT_BRANCH ==~ '^PR-[0-9]+' || GIT_BRANCH == "${getVar(G_binversion)}-rc" || GIT_BRANCH ==~ '^v[0-9]+'
                                 }
                             }
                             steps {
@@ -1020,7 +1020,7 @@ Possible RC: ${getVar(G_binversion)}-rc"""
                         stage('Deploy') {
                             when { 
                                 expression {
-                                    return GIT_BRANCH == 'master' || GIT_BRANCH ==~ '^PR-[0-9]+' || GIT_BRANCH == "${getVar(G_binversion)}-rc"
+                                    return GIT_BRANCH == 'master' || GIT_BRANCH ==~ '^PR-[0-9]+' || GIT_BRANCH == "${getVar(G_binversion)}-rc" || GIT_BRANCH ==~ '^v[0-9]+'
                                 }
                             }
                             steps {
@@ -1079,7 +1079,7 @@ Possible RC: ${getVar(G_binversion)}-rc"""
                         stage('Deploy') {
                             when { 
                                 expression {
-                                    return GIT_BRANCH == 'master' || GIT_BRANCH ==~ '^PR-[0-9]+' || GIT_BRANCH == "${getVar(G_binversion)}-rc"
+                                    return GIT_BRANCH == 'master' || GIT_BRANCH ==~ '^PR-[0-9]+' || GIT_BRANCH == "${getVar(G_binversion)}-rc" || GIT_BRANCH ==~ '^v[0-9]+'
                                 }
                             }
                             steps {
@@ -1104,7 +1104,7 @@ Possible RC: ${getVar(G_binversion)}-rc"""
         stage('Deploy to bucket') {
             when { 
                 expression {
-                    return GIT_BRANCH == 'master' || GIT_BRANCH ==~ '^PR-[0-9]+' || GIT_BRANCH == "${getVar(G_binversion)}-rc"
+                    return GIT_BRANCH == 'master' || GIT_BRANCH ==~ '^PR-[0-9]+' || GIT_BRANCH == "${getVar(G_binversion)}-rc" || GIT_BRANCH ==~ '^v[0-9]+'
                 }
             }
             steps {
@@ -1169,7 +1169,7 @@ Possible RC: ${getVar(G_binversion)}-rc"""
         stage('After stages') {
             when {
                 expression {
-                    return !isUpstream() && (GIT_BRANCH == 'master' || GIT_BRANCH ==~ '^PR-[0-9]+')
+                    return !isUpstream() && (GIT_BRANCH == 'master' || GIT_BRANCH ==~ '^PR-[0-9]+' ||  GIT_BRANCH ==~ '^v[0-9]+')
                 }
             }
             steps {
