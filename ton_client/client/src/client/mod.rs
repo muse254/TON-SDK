@@ -57,3 +57,15 @@ pub fn get_api_reference(_context: Arc<ClientContext>) -> ClientResult<ResultOfG
     })
 }
 
+#[derive(ApiType, Serialize, Deserialize, Clone)]
+pub struct ResultOfBuildInfo {
+    pub json: serde_json::Value,
+}
+
+#[api_function]
+pub fn build_info(_context: Arc<ClientContext>) -> ClientResult<ResultOfBuildInfo> {
+    Ok(ResultOfBuildInfo {
+        json: serde_json::from_str(include_str!("build_info.json")).unwrap_or(json!({}))
+    })
+}
+
